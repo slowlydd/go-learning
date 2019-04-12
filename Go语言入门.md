@@ -81,3 +81,55 @@ package
 
 
 私有对象是协程安全的，共享池是携程不安全的。
+
+### 单元测试
+
+表格测试法
+
+#### 内置单元测试框架
+
++ Fail， Error 该测试失败，该测试继续，其他测试继续执行
++ FailNow, Fatal 该测试失败，该测试中止，其他测试继续执行
+
+#### Benchmark
+
+```
+func BenchmarkConcatStringByAdd(b *testing.B) {
+  // 与性能测试无关的代码
+  b.ResetTimer()
+  for i := 0; i < b.N; i++ {
+    // 测试代码
+  }
+  b.StopTimer()
+  // 与性能测试无关的代码
+}
+```
+-bench=<相关benchmark测试>
+Windows下使用 go test 命令时，-bench=.应写为-bench="."
+-bench=<相关benchmark测试> -benchmem 性能原因分析
+
+#### bdd
+
+安装 go get -u github.com/smartystreets/goconvey/convey
+
+启动 WEB UI (windows下面无法成功运行)
+$GOPATH/bin/goconvey
+
+### 反射编程
+
+#### reflect.TypeOf vs. reflect.ValueOf
+
++ reflect.TypeOf 返回类型 (reflect.Type)
++ reflect.ValueOf 返回值 (reflect.Value)
++ 可以从 reflect.Value 获得类型 reflect.ValueOf(value).Type()
++ 通过 kind 判断类型
+
+
++ 按名字访问结构的成员
+  ```
+    reflect.ValueOf(*e).FieldByName("Name")
+  ```
++ 按名字访问结构的方法
+  ```
+    reflect.ValueOf(e).MethodByName("UpdateAge").Call([]reflect.Value{reflect.ValueOf(1)})
+  ```
